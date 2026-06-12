@@ -3,15 +3,14 @@ import { AboutMeData, Game, GameEngine, LinkImageSource, MediaType, Platform } f
 export const PersonalInfo: AboutMeData = {
   name: "HAMMAD MUMTAZ",
   role: "UNITY GAME DEVELOPER",
-  introduction: "Unity Game Developer with 1+ year of experience in Unity 2D/3D, C#, gameplay systems, and optimization. Passionate about building engaging, polished, and high-performance gaming experiences.
-",
+  introduction: "Unity Game Developer with 1+ year of experience in Unity 2D/3D, C#, gameplay systems, and optimization. Passionate about building engaging, polished, and high-performance gaming experiences.",
   description: "Hi, I'm Hammad a game developer and graphic designer who loves turning ideas into interactive experiences. I've spent the last year building games in Unity, designing characters, coding AI behaviors, and shipping projects for real clients. From a Flappy Bird clone to a third-person shooter controller, every project has taught me something new. When I'm not writing C# code, I'm designing logos and brochures or brainstorming the next game mechanic. I'm currently studying Computer Science and always looking for the next challenge to level up my skills.",
   image: `${process.env.PUBLIC_URL}/images/Profile.jpg`,
   cvUri: `${process.env.PUBLIC_URL}/files/YOUR_CV.pdf`,
   links: {
-    github: "https://github.com/NAME",
-    itchIO: "https://NAME.itch.io",
-    linkedIn: "https://www.linkedin.com/in/NAME",
+    github: "https://github.com/HammadMUmtaz",
+    itchIO: "https://HammadMUmtaz.itch.io",
+    linkedIn: "https://www.linkedin.com/in/HammadMumtaz",
   }
 };
 
