@@ -4,116 +4,112 @@ import BigMedia from "./BigMedia";
 import { MediaItem, MediaType } from "../types";
 import { Column, Row } from "../Styles/StyledComponents";
 
-
-export const GameMediaContainer = styled(Column)`
-  align-items: end;
-
-  @media (max-width: 768px) {
-    align-items: center;
-  }
+const GameMediaContainer = styled(Column)`
+  gap: 10px;
 `;
 
-export const LargeMediaWrapper = styled(Row) <{ $isFading: boolean }>`
+const LargeMediaWrapper = styled.div<{ $isFading: boolean }>`
   width: 100%;
-  height: 320px;
-  justify-content: center;
-  opacity: ${({ $isFading }) => ($isFading ? 0 : 1)};
-  transition: opacity 0.3s ease-in-out;
-`;
-
-export const ThumbnailContainer = styled(Row)`
-  width: 100%;
-  gap: 8px;
-  justify-content: center;
-`;
-
-export const Thumbnails = styled.div`
+  height: 260px;
   display: flex;
-  gap: 12px;
-  overflow-x: auto;
-  overflow-y: hidden;
-  max-width: 50%;
-  max-height: 160px;
-  padding: 12px;
-
-  @media (max-width: 1100px) {
-    max-width: 10%;
-  }
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #111;
+  border: 1px solid #1e1e1e;
+  opacity: ${({ $isFading }) => ($isFading ? 0 : 1)};
+  transition: opacity 0.2s ease-in-out;
 
   @media (max-width: 768px) {
-    max-width: 100%;
-    padding: 4px;
-    min-height: 0;
+    height: 200px;
   }
 `;
 
-export const ThumbnailWrapper = styled.div`
+const ThumbnailContainer = styled(Row)`
+  gap: 8px;
+  align-items: center;
+`;
+
+const Thumbnails = styled.div`
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  flex: 1;
+  padding: 4px 0;
+
+  &::-webkit-scrollbar { height: 3px; }
+  &::-webkit-scrollbar-thumb { background: #39d353; border-radius: 4px; }
+`;
+
+const ThumbnailWrapper = styled.div`
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 `;
 
-export const Thumbnail = styled.img<{ $isSelected: boolean }>`
-  width: 80px;
-  max-height: 120px;
-  min-height: 50px;
+const Thumbnail = styled.img<{ $isSelected: boolean }>`
+  width: 72px;
+  height: 50px;
   object-fit: cover;
   cursor: pointer;
   border-radius: 5px;
-  border: 3px solid ${({ $isSelected }) => ($isSelected ? "#4e9f3d" : "transparent")};
-  transform: ${({ $isSelected }) => ($isSelected ? "scale(1.1)" : "none")};
-  transition: transform 0.1s ease-in-out;
+  border: 2px solid ${({ $isSelected }) => ($isSelected ? "#39d353" : "#1e1e1e")};
+  opacity: ${({ $isSelected }) => ($isSelected ? 1 : 0.6)};
+  transition: border-color 0.15s, opacity 0.15s;
+
+  &:hover {
+    opacity: 1;
+    border-color: #39d353;
+  }
+
+  @media (max-width: 768px) {
+    width: 58px;
+    height: 40px;
+  }
 `;
 
-export const PlayIcon = styled.button`
+const PlayIcon = styled.button`
   position: absolute;
-  width: 36px;
-  height: 36px;
-  background: rgba(0, 0, 0, 0.7);
+  width: 28px;
+  height: 28px;
+  background: rgba(0,0,0,0.75);
   border-radius: 50%;
   border: none;
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
-  font-size: 16px;
-  transition: transform 0.2s ease-in-out;
+  font-size: 12px;
+  cursor: pointer;
+  pointer-events: none;
 
-  &:hover {
-    transform: scale(1.2);
-  }
-
-  &:before {
+  &::before {
     content: "▶";
-    font-size: 16px;
     margin-left: 2px;
   }
 `;
 
-export const Arrow = styled.button`
-  background: rgba(255, 255, 255, 0.3);
-  border: none;
-  padding: 10px;
-  color: black;
+const ArrowBtn = styled.button`
+  background: #111;
+  border: 1px solid #1e1e1e;
+  color: #888;
   cursor: pointer;
-  font-size: 20px;
-  border-radius: 50%;
-  transition: background 0.3s ease;
-  width: 40px;
-  height: 40px;
+  font-size: 14px;
+  border-radius: 6px;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+  transition: color 0.2s, border-color 0.2s;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.6);
-  }
-
-  @media (max-width: 768px) {
-    font-size: 16px;
-    width: 30px;
-    height: 30px;
+    color: #39d353;
+    border-color: #39d353;
   }
 `;
 
@@ -131,7 +127,6 @@ const getYouTubeThumbnail = (url: string) => {
 const GameMedia: React.FC<GameMediaProps> = ({ media }) => {
   const thumbnailsContainerRef = useRef<HTMLDivElement | null>(null);
   const thumbnailRefs = useRef<(HTMLImageElement | null)[]>([]);
-
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFading, setIsFading] = useState(false);
 
@@ -141,47 +136,41 @@ const GameMedia: React.FC<GameMediaProps> = ({ media }) => {
       setTimeout(() => {
         setCurrentIndex(newIndex);
         setIsFading(false);
-        const thumbnail = thumbnailRefs.current[newIndex];
-        thumbnail?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-
+        thumbnailRefs.current[newIndex]?.scrollIntoView({ behavior: "smooth", block: "nearest" });
       }, 150);
     }
   };
 
-  const handleThumbnailClick = (index: number) => updateMediaIndex(index);
   const nextMedia = () => updateMediaIndex((currentIndex + 1) % media.length);
   const prevMedia = () => updateMediaIndex((currentIndex - 1 + media.length) % media.length);
-
 
   return (
     <GameMediaContainer>
       <LargeMediaWrapper $isFading={isFading}>
         <BigMedia source={media[currentIndex].source} type={media[currentIndex].type} />
       </LargeMediaWrapper>
-
       <ThumbnailContainer>
-        <Arrow onClick={prevMedia}>◀&nbsp;</Arrow>
+        <ArrowBtn onClick={prevMedia}>◀</ArrowBtn>
         <Thumbnails ref={thumbnailsContainerRef}>
           {media.map((item, index) => {
-            const isYouTubeVideo = item.type === MediaType.YouTube;
-            const thumbnailSrc = isYouTubeVideo ? getYouTubeThumbnail(item.source) : `${process.env.PUBLIC_URL}${item.source}`;
-
+            const isYouTube = item.type === MediaType.YouTube;
+            const src = isYouTube
+              ? getYouTubeThumbnail(item.source)
+              : `${process.env.PUBLIC_URL}${item.source}`;
             return (
               <ThumbnailWrapper key={index}>
                 <Thumbnail
-                  id={`thumbnail${index}`}
                   ref={(el) => (thumbnailRefs.current[index] = el)}
-                  src={thumbnailSrc}
+                  src={src}
                   $isSelected={index === currentIndex}
-                  onClick={() => handleThumbnailClick(index)}
+                  onClick={() => updateMediaIndex(index)}
                 />
-                {isYouTubeVideo && <PlayIcon onClick={() => handleThumbnailClick(index)} />}
+                {isYouTube && <PlayIcon />}
               </ThumbnailWrapper>
             );
           })}
-
         </Thumbnails>
-        <Arrow onClick={nextMedia}>&nbsp;▶</Arrow>
+        <ArrowBtn onClick={nextMedia}>▶</ArrowBtn>
       </ThumbnailContainer>
     </GameMediaContainer>
   );

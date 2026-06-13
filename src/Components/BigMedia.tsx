@@ -4,27 +4,21 @@ import { MediaItem, MediaType } from "../types";
 import { Row } from "../Styles/StyledComponents";
 
 const MediaWrapper = styled(Row)`
-justify-content: center;
+  justify-content: center;
   width: 100%;
   height: 100%;
-  cursor: pointer;
 `;
 
 const MediaIframe = styled.iframe`
-  width: 70%;
+  width: 100%;
   height: 100%;
   border: none;
-
-  @media (max-width: 768px) {
-    width: 100%;
-  }
 `;
 
 const MediaImage = styled.img`
   width: 100%;
-  height: auto;
-  max-height: 300px;
-  object-fit: contain;
+  height: 100%;
+  object-fit: cover;
   cursor: pointer;
 `;
 
@@ -34,42 +28,30 @@ const PopupOverlay = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.92);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
+  cursor: pointer;
 `;
 
 const PopupImage = styled.img`
-  max-width: 70%;
-  max-height: 70%;
-
-  @media (max-width: 768px) {
-    max-width: 90%;
-    max-height: 90%;
-  }
+  max-width: 88%;
+  max-height: 88%;
+  border-radius: 6px;
+  border: 1px solid #1e1e1e;
 `;
 
 const BigMedia: React.FC<MediaItem> = ({ source, type }) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
-  const handleClick = () => {
-    if (type === MediaType.Image) {
-      setIsPopupOpen(true);
-    }
-  };
-
-  const getYouTubeEmbedUrl = (url: string) => {
-    return`${url}?autoplay=1&mute=1`;
-  };
-
   return (
     <>
-      <MediaWrapper onClick={handleClick}>
+      <MediaWrapper onClick={() => type === MediaType.Image && setIsPopupOpen(true)}>
         {type === MediaType.YouTube ? (
           <MediaIframe
-            src={getYouTubeEmbedUrl(source)}
+            src={`${source}?autoplay=1&mute=1`}
             allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
           />
@@ -77,10 +59,9 @@ const BigMedia: React.FC<MediaItem> = ({ source, type }) => {
           <MediaImage src={`${process.env.PUBLIC_URL}${source}`} alt="Game Media" />
         )}
       </MediaWrapper>
-
       {isPopupOpen && (
         <PopupOverlay onClick={() => setIsPopupOpen(false)}>
-          <PopupImage src={`${process.env.PUBLIC_URL}${source}`} alt="Enlarged Media" />
+          <PopupImage src={`${process.env.PUBLIC_URL}${source}`} alt="Enlarged" />
         </PopupOverlay>
       )}
     </>

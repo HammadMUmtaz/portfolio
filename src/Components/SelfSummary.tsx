@@ -1,161 +1,119 @@
-import React, { useEffect, useState } from "react";
-import { styled, keyframes } from "styled-components";
+import React from "react";
+import { styled } from "styled-components";
 import { PersonalInfo } from "../data";
 import { Column, Row } from "../Styles/StyledComponents";
 import LogoButton from "./LogoButton";
 
-const glowPulse = keyframes`
-  0%, 100% { text-shadow: 0 0 10px #a855f7, 0 0 20px #a855f7, 0 0 40px #a855f7; }
-  50%       { text-shadow: 0 0 20px #06b6d4, 0 0 40px #06b6d4, 0 0 80px #06b6d4; }
-`;
-
-const fadeInDown = keyframes`
-  from { opacity: 0; transform: translateY(-20px); }
-  to   { opacity: 1; transform: translateY(0); }
-`;
-
-const fadeInUp = keyframes`
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
-`;
-
-const borderAnim = keyframes`
-  0%, 100% { border-color: rgba(168,85,247,0.4); }
-  50%       { border-color: rgba(6,182,212,0.4); }
-`;
-
-const blink = keyframes`
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0; }
-`;
-
-const SelfSummaryContainer = styled(Column)`
-  background: rgba(10, 10, 15, 0.7);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(168,85,247,0.2);
-  border-radius: 16px;
-  padding: 30px 40px;
-  animation: ${borderAnim} 4s ease-in-out infinite, ${fadeInDown} 0.8s ease both;
-
-  @media (max-width: 768px) {
-    padding: 16px;
-  }
+const Container = styled(Column)`
+  gap: 12px;
 `;
 
 const TopRow = styled(Row)`
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: 12px;
+  align-items: flex-start;
 `;
 
-const Title = styled.div`
-  font-size: 2.8em;
-  font-family: "PhoenixGaming", sans-serif;
-  background: linear-gradient(135deg, #a855f7, #06b6d4);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: ${glowPulse} 3s ease-in-out infinite;
-  filter: drop-shadow(0 0 15px rgba(168,85,247,0.4));
+const NameBlock = styled(Column)`
+  gap: 6px;
+`;
+
+const Prefix = styled.span`
+  font-family: 'ZenDots', monospace;
+  font-size: 0.78rem;
+  color: #39d353;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+`;
+
+const Name = styled.h1`
+  margin: 0;
+  font-family: 'PhoenixGaming', sans-serif;
+  font-size: 2.6rem;
+  color: #f0f0f0;
+  line-height: 1;
+  letter-spacing: 0.03em;
 
   @media (max-width: 768px) {
-    font-size: 1.4em;
+    font-size: 1.7rem;
   }
 `;
 
 const RoleTag = styled.div`
-  font-family: 'ZenDots', sans-serif;
-  font-size: 0.75rem;
-  color: #06b6d4;
-  border: 1px solid rgba(6,182,212,0.4);
-  border-radius: 20px;
-  padding: 4px 14px;
-  margin-top: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'ZenDots', monospace;
+  font-size: 0.72rem;
+  color: #39d353;
+  border: 1px solid #39d353;
+  border-radius: 4px;
+  padding: 3px 10px;
   width: fit-content;
-  letter-spacing: 0.1em;
-  background: rgba(6,182,212,0.05);
-`;
+  letter-spacing: 0.08em;
 
-const Description = styled.p`
-  font-size: 1rem;
-  max-width: 65vw;
-  font-family: "Oxanium", sans-serif;
-  margin: 16px 0 0 0;
-  color: #94a3b8;
-  line-height: 1.7;
-  animation: ${fadeInUp} 1s ease 0.3s both;
-
-  @media (max-width: 768px) {
-    max-width: 100%;
-    font-size: 0.85rem;
-  }
-`;
-
-const Cursor = styled.span`
-  display: inline-block;
-  width: 2px;
-  height: 1em;
-  background: #a855f7;
-  margin-left: 2px;
-  vertical-align: middle;
-  animation: ${blink} 1s step-end infinite;
-`;
-
-const Logo = styled.img`
-  height: 70px;
-  margin-right: 12px;
-  filter: drop-shadow(0 0 10px rgba(168,85,247,0.6));
-  transition: transform 0.3s ease;
-
-  &:hover { transform: scale(1.1) rotate(5deg); }
-
-  @media (max-width: 768px) {
-    height: 40px;
+  &::before {
+    content: '▸';
   }
 `;
 
 const SocialRow = styled(Row)`
   gap: 4px;
+  align-items: center;
+
+  @media (max-width: 480px) {
+    gap: 2px;
+  }
+`;
+
+const Intro = styled.p`
+  margin: 0;
+  font-size: 0.95rem;
+  color: #888;
+  line-height: 1.7;
+  max-width: 680px;
+
+  @media (max-width: 768px) {
+    font-size: 0.85rem;
+  }
+`;
+
+const Logo = styled.img`
+  height: 52px;
+  width: 52px;
+  border-radius: 8px;
+  margin-right: 14px;
+  object-fit: cover;
+  border: 1px solid #1e1e1e;
+
+  @media (max-width: 768px) {
+    height: 38px;
+    width: 38px;
+    margin-right: 10px;
+  }
 `;
 
 const SelfSummary: React.FC = () => {
-  const [displayed, setDisplayed] = useState("");
-  const fullText = PersonalInfo.introduction;
-
-  useEffect(() => {
-    let i = 0;
-    const timer = setInterval(() => {
-      if (i < fullText.length) {
-        setDisplayed(fullText.slice(0, i + 1));
-        i++;
-      } else {
-        clearInterval(timer);
-      }
-    }, 18);
-    return () => clearInterval(timer);
-  }, [fullText]);
-
   return (
-    <SelfSummaryContainer>
+    <Container>
       <TopRow>
-        <Row>
+        <Row style={{ alignItems: 'flex-start' }}>
           <Logo src={`${process.env.PUBLIC_URL}/favicon.ico`} />
-          <Column>
-            <Title>{PersonalInfo.name}</Title>
-            <RoleTag>⚡ {PersonalInfo.role}</RoleTag>
-          </Column>
+          <NameBlock>
+            <Prefix>// portfolio</Prefix>
+            <Name>{PersonalInfo.name}</Name>
+            <RoleTag>{PersonalInfo.role}</RoleTag>
+          </NameBlock>
         </Row>
         <SocialRow>
-          <LogoButton source="/images/logos/github.png" size={60} margin={8} linkTo={PersonalInfo.links.github} />
-          <LogoButton source="/images/logos/linkedIn.png" size={60} margin={8} linkTo={PersonalInfo.links.linkedIn} />
-          <LogoButton source="/images/logos/itch.io.png" size={60} margin={8} linkTo={PersonalInfo.links.itchIO} />
+          <LogoButton source="/images/logos/github.png" size={52} margin={4} linkTo={PersonalInfo.links.github} />
+          <LogoButton source="/images/logos/linkedIn.png" size={52} margin={4} linkTo={PersonalInfo.links.linkedIn} />
+          <LogoButton source="/images/logos/itch.io.png" size={52} margin={4} linkTo={PersonalInfo.links.itchIO} />
         </SocialRow>
       </TopRow>
-      <Description>
-        {displayed}
-        <Cursor />
-      </Description>
-    </SelfSummaryContainer>
+      <Intro>{PersonalInfo.introduction}</Intro>
+    </Container>
   );
 };
 

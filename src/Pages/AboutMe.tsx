@@ -1,100 +1,107 @@
-import React, { useEffect, useRef, useState } from "react";
-import styled, { keyframes } from "styled-components";
+import React from "react";
+import styled from "styled-components";
 import { PersonalInfo } from "../data";
 import { Column, Row } from "../Styles/StyledComponents";
 
-const fadeInUp = keyframes`
-  from { opacity: 0; transform: translateY(30px); }
-  to   { opacity: 1; transform: translateY(0); }
-`;
-
-const rotateBorder = keyframes`
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
-`;
-
-const glowPulse = keyframes`
-  0%, 100% { box-shadow: 0 0 20px rgba(168,85,247,0.5), 0 0 40px rgba(168,85,247,0.2); }
-  50%       { box-shadow: 0 0 30px rgba(6,182,212,0.5), 0 0 60px rgba(6,182,212,0.2); }
-`;
-
 const Container = styled(Column)`
-  align-items: center;
-  margin-top: 40px;
-  gap: 30px;
-  text-align: center;
-  animation: ${fadeInUp} 0.7s ease both;
+  gap: 32px;
 `;
 
-const ProfileWrapper = styled.div`
-  position: relative;
-  width: 170px;
-  height: 170px;
+const ProfileSection = styled(Row)`
+  gap: 28px;
+  align-items: flex-start;
+  flex-wrap: wrap;
 
-  &::before {
-    content: '';
-    position: absolute;
-    inset: -4px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #a855f7, #06b6d4, #a855f7);
-    animation: ${rotateBorder} 3s linear infinite;
-    z-index: 0;
-  }
-
-  &::after {
-    content: '';
-    position: absolute;
-    inset: -8px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, rgba(168,85,247,0.2), rgba(6,182,212,0.2));
-    animation: ${rotateBorder} 3s linear infinite reverse;
-    z-index: 0;
+  @media (max-width: 600px) {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
   }
 `;
 
 const ProfileImage = styled.img`
-  width: 160px;
-  height: 160px;
-  border-radius: 50%;
-  position: relative;
-  z-index: 1;
-  border: 4px solid #0a0a0f;
-  animation: ${glowPulse} 3s ease-in-out infinite;
+  width: 130px;
+  height: 130px;
+  border-radius: 10px;
   object-fit: cover;
+  border: 2px solid #1e1e1e;
+  flex-shrink: 0;
 
-  @media (max-width: 768px) {
-    width: 120px;
-    height: 120px;
+  @media (max-width: 600px) {
+    width: 100px;
+    height: 100px;
   }
 `;
 
-const Card = styled.div`
-  background: rgba(10, 10, 15, 0.8);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(168,85,247,0.2);
-  border-radius: 16px;
-  padding: 30px 40px;
-  max-width: 750px;
-  width: 90%;
-  transition: border-color 0.3s, box-shadow 0.3s;
+const InfoBlock = styled(Column)`
+  gap: 10px;
+  flex: 1;
+  min-width: 200px;
+`;
 
-  &:hover {
-    border-color: rgba(168,85,247,0.5);
-    box-shadow: 0 0 30px rgba(168,85,247,0.1);
-  }
+const Label = styled.span`
+  font-family: 'ZenDots', monospace;
+  font-size: 0.7rem;
+  color: #39d353;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+`;
+
+const BigName = styled.h2`
+  margin: 0;
+  font-family: 'PhoenixGaming', sans-serif;
+  font-size: 1.9rem;
+  color: #f0f0f0;
 
   @media (max-width: 768px) {
-    padding: 20px;
+    font-size: 1.4rem;
+  }
+`;
+
+const RoleTag = styled.div`
+  font-family: 'ZenDots', monospace;
+  font-size: 0.7rem;
+  color: #39d353;
+  border: 1px solid #39d353;
+  border-radius: 4px;
+  padding: 3px 10px;
+  width: fit-content;
+
+  @media (max-width: 600px) {
+    margin: 0 auto;
+  }
+`;
+
+const Divider = styled.div`
+  width: 100%;
+  height: 1px;
+  background: #1e1e1e;
+`;
+
+const SectionTitle = styled.h3`
+  margin: 0 0 12px 0;
+  font-family: 'ZenDots', monospace;
+  font-size: 0.8rem;
+  color: #39d353;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  &::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #1e1e1e;
   }
 `;
 
 const AboutText = styled.p`
-  line-height: 1.8;
   margin: 0;
-  color: #94a3b8;
-  font-size: 1rem;
-  white-space: pre-line;
-  text-align: left;
+  font-size: 0.95rem;
+  color: #888;
+  line-height: 1.8;
 
   @media (max-width: 768px) {
     font-size: 0.88rem;
@@ -105,38 +112,50 @@ const CVButton = styled.a`
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 14px 36px;
-  font-size: 1rem;
-  font-family: 'ZenDots', sans-serif;
-  color: white;
-  background: linear-gradient(135deg, #a855f7, #06b6d4);
+  padding: 11px 26px;
+  font-size: 0.85rem;
+  font-family: 'ZenDots', monospace;
+  color: #0d0d0d;
+  background: #39d353;
   text-decoration: none;
-  border-radius: 50px;
-  transition: all 0.3s ease;
-  box-shadow: 0 0 20px rgba(168,85,247,0.3);
-  letter-spacing: 0.05em;
+  border-radius: 6px;
+  letter-spacing: 0.06em;
+  transition: background 0.2s, transform 0.15s;
+  width: fit-content;
 
   &:hover {
-    transform: translateY(-3px) scale(1.04);
-    box-shadow: 0 0 35px rgba(168,85,247,0.6);
-    color: white;
+    background: #57e870;
+    color: #0d0d0d;
+    transform: translateY(-1px);
     text-shadow: none;
   }
 
-  &:active { transform: scale(0.97); }
+  &:active {
+    transform: scale(0.98);
+  }
 `;
 
 const AboutMe: React.FC = () => {
   return (
     <Container>
-      <ProfileWrapper>
+      <ProfileSection>
         <ProfileImage src={PersonalInfo.image} alt={PersonalInfo.name} />
-      </ProfileWrapper>
-      <Card>
+        <InfoBlock>
+          <Label>// about me</Label>
+          <BigName>{PersonalInfo.name}</BigName>
+          <RoleTag>▸ {PersonalInfo.role}</RoleTag>
+        </InfoBlock>
+      </ProfileSection>
+
+      <Divider />
+
+      <div>
+        <SectionTitle>Bio</SectionTitle>
         <AboutText>{PersonalInfo.description}</AboutText>
-      </Card>
+      </div>
+
       <CVButton href={`${PersonalInfo.cvUri}`} download>
-        ⬇ Download My CV
+        ↓ Download CV
       </CVButton>
     </Container>
   );

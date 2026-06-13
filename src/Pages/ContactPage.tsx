@@ -1,119 +1,100 @@
 import React, { useState } from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import { Column } from '../Styles/StyledComponents';
 
-const fadeInUp = keyframes`
-  from { opacity: 0; transform: translateY(30px); }
-  to   { opacity: 1; transform: translateY(0); }
+const Container = styled(Column)`
+  align-items: flex-start;
+  max-width: 480px;
+  gap: 8px;
 `;
 
-const glowBorder = keyframes`
-  0%, 100% { border-color: rgba(168,85,247,0.3); box-shadow: 0 0 20px rgba(168,85,247,0.1); }
-  50%       { border-color: rgba(6,182,212,0.3); box-shadow: 0 0 30px rgba(6,182,212,0.1); }
-`;
-
-const CenterContainer = styled(Column)`
-  align-items: center;
-  margin-top: 60px;
-  animation: ${fadeInUp} 0.7s ease both;
-
-  @media (max-width: 768px) { margin-top: 30px; }
-`;
-
-const ContactContainer = styled(Column)`
-  width: 420px;
-  max-width: 90vw;
-  padding: 40px 50px;
-  align-items: center;
-  background: rgba(10, 10, 15, 0.85);
-  backdrop-filter: blur(20px);
-  border-radius: 20px;
-  border: 1px solid rgba(168,85,247,0.3);
-  animation: ${glowBorder} 4s ease-in-out infinite;
-
-  @media (max-width: 768px) {
-    padding: 24px 20px;
-  }
+const Label = styled.span`
+  font-family: 'ZenDots', monospace;
+  font-size: 0.7rem;
+  color: #39d353;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
 `;
 
 const Title = styled.h2`
   margin: 0 0 24px 0;
-  font-family: 'ZenDots', sans-serif;
-  font-size: 1.4rem;
-  background: linear-gradient(135deg, #a855f7, #06b6d4);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  letter-spacing: 0.08em;
+  font-family: 'PhoenixGaming', sans-serif;
+  font-size: 1.8rem;
+  color: #f0f0f0;
+`;
+
+const FieldLabel = styled.label`
+  font-size: 0.78rem;
+  color: #555;
+  font-family: 'ZenDots', monospace;
+  letter-spacing: 0.06em;
+  margin-top: 8px;
 `;
 
 const Input = styled.input`
   width: 100%;
-  padding: 12px 16px;
-  margin: 8px 0;
-  border: 1px solid rgba(168,85,247,0.3);
-  border-radius: 10px;
-  font-size: 0.95rem;
-  font-family: 'Oxanium', sans-serif;
-  background: rgba(168,85,247,0.05);
-  color: #e2e8f0;
+  padding: 11px 14px;
+  border: 1px solid #1e1e1e;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-family: 'Oxanium', monospace;
+  background: #111;
+  color: #d4d4d4;
   outline: none;
-  transition: border-color 0.3s, box-shadow 0.3s;
+  transition: border-color 0.2s;
   box-sizing: border-box;
 
   &:focus {
-    border-color: #a855f7;
-    box-shadow: 0 0 0 3px rgba(168,85,247,0.15);
+    border-color: #39d353;
   }
 
-  &::placeholder { color: #4a5568; }
+  &::placeholder { color: #333; }
 `;
 
 const TextArea = styled.textarea`
   width: 100%;
-  padding: 12px 16px;
-  margin: 8px 0;
-  border: 1px solid rgba(168,85,247,0.3);
-  border-radius: 10px;
-  font-size: 0.95rem;
-  font-family: 'Oxanium', sans-serif;
-  background: rgba(168,85,247,0.05);
-  color: #e2e8f0;
+  padding: 11px 14px;
+  border: 1px solid #1e1e1e;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-family: 'Oxanium', monospace;
+  background: #111;
+  color: #d4d4d4;
   outline: none;
-  height: 120px;
+  height: 130px;
   resize: vertical;
-  transition: border-color 0.3s, box-shadow 0.3s;
+  transition: border-color 0.2s;
   box-sizing: border-box;
 
   &:focus {
-    border-color: #a855f7;
-    box-shadow: 0 0 0 3px rgba(168,85,247,0.15);
+    border-color: #39d353;
   }
 
-  &::placeholder { color: #4a5568; }
+  &::placeholder { color: #333; }
 `;
 
 const Button = styled.button`
-  width: 100%;
-  padding: 14px 20px;
-  margin-top: 16px;
-  background: linear-gradient(135deg, #a855f7, #06b6d4);
-  color: white;
+  margin-top: 12px;
+  padding: 12px 28px;
+  background: #39d353;
+  color: #0d0d0d;
   border: none;
-  border-radius: 50px;
-  font-size: 1rem;
-  font-family: 'ZenDots', sans-serif;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-family: 'ZenDots', monospace;
   cursor: pointer;
-  transition: all 0.3s ease;
-  letter-spacing: 0.05em;
-  box-shadow: 0 0 20px rgba(168,85,247,0.3);
+  letter-spacing: 0.06em;
+  transition: background 0.2s, transform 0.15s;
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 0 35px rgba(168,85,247,0.6);
+    background: #57e870;
+    transform: translateY(-1px);
   }
 
-  &:active { transform: scale(0.97); }
+  &:active {
+    transform: scale(0.98);
+  }
 `;
 
 const ContactMe: React.FC = () => {
@@ -127,23 +108,27 @@ const ContactMe: React.FC = () => {
   };
 
   return (
-    <CenterContainer>
-      <ContactContainer>
-        <Title>💬 Contact Me</Title>
-        <Input
-          type="text"
-          placeholder="Your Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <TextArea
-          placeholder="Your Message..."
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-        />
-        <Button onClick={handleSubmit}>⚡ Send via WhatsApp</Button>
-      </ContactContainer>
-    </CenterContainer>
+    <Container>
+      <Label>// contact</Label>
+      <Title>Get In Touch</Title>
+
+      <FieldLabel>YOUR NAME</FieldLabel>
+      <Input
+        type="text"
+        placeholder="John Doe"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
+
+      <FieldLabel>MESSAGE</FieldLabel>
+      <TextArea
+        placeholder="I'd like to talk about..."
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+      />
+
+      <Button onClick={handleSubmit}>Send via WhatsApp →</Button>
+    </Container>
   );
 };
 
