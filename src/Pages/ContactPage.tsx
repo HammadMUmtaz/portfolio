@@ -1,73 +1,119 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { Column } from '../Styles/StyledComponents';
+
+const fadeInUp = keyframes`
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+`;
+
+const glowBorder = keyframes`
+  0%, 100% { border-color: rgba(168,85,247,0.3); box-shadow: 0 0 20px rgba(168,85,247,0.1); }
+  50%       { border-color: rgba(6,182,212,0.3); box-shadow: 0 0 30px rgba(6,182,212,0.1); }
+`;
 
 const CenterContainer = styled(Column)`
   align-items: center;
-  margin-top: 80px;
+  margin-top: 60px;
+  animation: ${fadeInUp} 0.7s ease both;
 
-  @media (max-width: 768px) {
-    margin-top: 40px;
-  }
+  @media (max-width: 768px) { margin-top: 30px; }
 `;
 
 const ContactContainer = styled(Column)`
-  width: 30vw;
-  padding: 30px 60px;
-    align-items: center;
+  width: 420px;
+  max-width: 90vw;
+  padding: 40px 50px;
+  align-items: center;
+  background: rgba(10, 10, 15, 0.85);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  border: 1px solid rgba(168,85,247,0.3);
+  animation: ${glowBorder} 4s ease-in-out infinite;
 
-  background-color: #121212;
-  border-radius: 10px;
-  color: white;
-  
   @media (max-width: 768px) {
-    width: 70vw;
-    padding: 10px 30px;
+    padding: 24px 20px;
   }
 `;
+
 const Title = styled.h2`
-  margin: 30px;
-  
-  @media (max-width: 768px) {
-    font-size: 1em;
-    margin-bottom: 15px;
-  }
+  margin: 0 0 24px 0;
+  font-family: 'ZenDots', sans-serif;
+  font-size: 1.4rem;
+  background: linear-gradient(135deg, #a855f7, #06b6d4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 0.08em;
 `;
 
 const Input = styled.input`
-  width: 80%;
-  max-width: 400px;
-  padding: 10px;
-  margin: 10px 0;
-  border: none;
-  border-radius: 5px;
-  font-size: 16px;
+  width: 100%;
+  padding: 12px 16px;
+  margin: 8px 0;
+  border: 1px solid rgba(168,85,247,0.3);
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-family: 'Oxanium', sans-serif;
+  background: rgba(168,85,247,0.05);
+  color: #e2e8f0;
+  outline: none;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  box-sizing: border-box;
+
+  &:focus {
+    border-color: #a855f7;
+    box-shadow: 0 0 0 3px rgba(168,85,247,0.15);
+  }
+
+  &::placeholder { color: #4a5568; }
 `;
 
 const TextArea = styled.textarea`
-  width: 80%;
-  max-width: 400px;
-  padding: 10px;
-  margin: 10px 0;
-  border: none;
-  border-radius: 5px;
-  font-size: 16px;
-  height: 100px;
+  width: 100%;
+  padding: 12px 16px;
+  margin: 8px 0;
+  border: 1px solid rgba(168,85,247,0.3);
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-family: 'Oxanium', sans-serif;
+  background: rgba(168,85,247,0.05);
+  color: #e2e8f0;
+  outline: none;
+  height: 120px;
+  resize: vertical;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  box-sizing: border-box;
+
+  &:focus {
+    border-color: #a855f7;
+    box-shadow: 0 0 0 3px rgba(168,85,247,0.15);
+  }
+
+  &::placeholder { color: #4a5568; }
 `;
 
 const Button = styled.button`
-  padding: 10px 20px;
-  margin: 20px 0;
-  background-color: #25d366;
+  width: 100%;
+  padding: 14px 20px;
+  margin-top: 16px;
+  background: linear-gradient(135deg, #a855f7, #06b6d4);
   color: white;
   border: none;
-  border-radius: 5px;
-  font-size: 16px;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-family: 'ZenDots', sans-serif;
   cursor: pointer;
-  
+  transition: all 0.3s ease;
+  letter-spacing: 0.05em;
+  box-shadow: 0 0 20px rgba(168,85,247,0.3);
+
   &:hover {
-    background-color: #1da851;
+    transform: translateY(-2px);
+    box-shadow: 0 0 35px rgba(168,85,247,0.6);
   }
+
+  &:active { transform: scale(0.97); }
 `;
 
 const ContactMe: React.FC = () => {
@@ -83,7 +129,7 @@ const ContactMe: React.FC = () => {
   return (
     <CenterContainer>
       <ContactContainer>
-        <Title>Contact Me</Title>
+        <Title>💬 Contact Me</Title>
         <Input
           type="text"
           placeholder="Your Name"
@@ -91,11 +137,11 @@ const ContactMe: React.FC = () => {
           onChange={(e) => setName(e.target.value)}
         />
         <TextArea
-          placeholder="Your Message"
+          placeholder="Your Message..."
           value={message}
           onChange={(e) => setMessage(e.target.value)}
         />
-        <Button onClick={handleSubmit}>Send via WhatsApp</Button>
+        <Button onClick={handleSubmit}>⚡ Send via WhatsApp</Button>
       </ContactContainer>
     </CenterContainer>
   );
